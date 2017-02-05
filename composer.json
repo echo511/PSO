@@ -1,0 +1,24 @@
+{
+  "name": "echo511/pso",
+  "description": "Particle Swarm Optimization algorithm",
+  "type": "library",
+  "require-dev": {
+    "codeception/codeception": "^2.2",
+    "phpstan/phpstan": "^0.6.3",
+    "squizlabs/php_codesniffer": "^2.8"
+  },
+  "license": "MIT License",
+  "authors": [
+    {
+      "name": "Nikolas Tsiongas",
+      "email": "ntsiongas@gmail.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {},
+  "autoload": {
+    "psr-4": {
+      "Echo511\\PSO\\": "src/Echo511/PSO/"
+    }
+  }
+}
