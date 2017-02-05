@@ -17,7 +17,8 @@ $c2 = 0.3;
 $c3 = 0.3;
 
 $numberOfParticles = 50;
-$numberOfIterations = 50;
+
+$limiter = \Echo511\PSO\Limiters::createStandardDeviationLimiter(0.5, 500);
 
 $generateParticleCoordinatesCallback = function () {
     return new \Echo511\PSO\Coordinates([rand(-50, 50)]);
@@ -28,7 +29,7 @@ $generateParticleVelocityCallback = function () {
     return new \Echo511\PSO\Vector($coordinates);
 };
 
-$swarm = new \Echo511\PSO\Swarm($function, $optimizer, $c1, $c2, $c3, $numberOfParticles, $numberOfIterations, $generateParticleCoordinatesCallback, $generateParticleVelocityCallback);
+$swarm = new \Echo511\PSO\Swarm($function, $optimizer, $c1, $c2, $c3, $numberOfParticles, $limiter, $generateParticleCoordinatesCallback, $generateParticleVelocityCallback);
 $swarm->run();
 
 $value = (int) round($swarm->getBestValue());

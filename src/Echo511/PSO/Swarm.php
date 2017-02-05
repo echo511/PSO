@@ -44,7 +44,7 @@ class Swarm
     /**
      * @var null|int
      */
-    private $numberOfIterations = null;
+    private $limiter = null;
 
     /**
      * @var callable
@@ -74,10 +74,10 @@ class Swarm
      * @param $c1
      * @param $c2
      * @param $c3
-     * @param int                                 $numberOfParticles
-     * @param null                                $numberOfIterations
-     * @param $generateParticleCoordinatesCallback
-     * @param $generateParticleVelocityCallback
+     * @param int $numberOfParticles
+     * @param callable $limiter (Particle[], $iteration)
+     * @param callable $generateParticleCoordinatesCallback
+     * @param callable $generateParticleVelocityCallback
      */
     public function __construct(
         $function,
@@ -86,7 +86,7 @@ class Swarm
         $c2,
         $c3,
         $numberOfParticles,
-        $numberOfIterations,
+        $limiter,
         $generateParticleCoordinatesCallback,
         $generateParticleVelocityCallback
     ) {
@@ -97,13 +97,14 @@ class Swarm
         $this->c2 = $c2;
         $this->c3 = $c3;
         $this->numberOfParticles = $numberOfParticles;
-        $this->numberOfIterations = $numberOfIterations;
+        $this->limiter = $limiter;
         $this->generateParticleCoordinatesCallback = $generateParticleCoordinatesCallback;
         $this->generateParticleVelocityCallback = $generateParticleVelocityCallback;
     }
 
     /**
      * Run.
+     * @return int Number of iterations
      */
     public function run()
     {
@@ -113,12 +114,13 @@ class Swarm
         $this->bestValue = call_user_func_array($this->function, [$coordinates]);
 
         $n = 1;
-        while ($n <= $this->numberOfIterations) {
+        while (!call_user_func_array($this->limiter, [$particles, $n])) {
             foreach ($particles as $particle) {
                 $particle->move();
             }
             $n += 1;
         }
+        return $n;
     }
 
     /**

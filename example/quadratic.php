@@ -16,7 +16,13 @@ $c2 = 0.3;
 $c3 = 0.3;
 
 $numberOfParticles = 50;
-$numberOfIterations = 50;
+
+/**
+ * @param $particles \Echo511\PSO\Particle[]
+ * @param $iteration
+ * @return bool
+ */
+$limiter = \Echo511\PSO\Limiters::createStandardDeviationLimiter(0.5, 50);
 
 $generateParticleCoordinatesCallback = function () {
     return new \Echo511\PSO\Coordinates([rand(-50, 50)]);
@@ -27,12 +33,15 @@ $generateParticleVelocityCallback = function () {
     return new \Echo511\PSO\Vector($coordinates);
 };
 
-$swarm = new \Echo511\PSO\Swarm($function, $optimizer, $c1, $c2, $c3, $numberOfParticles, $numberOfIterations, $generateParticleCoordinatesCallback, $generateParticleVelocityCallback);
-$swarm->run();
+$swarm = new \Echo511\PSO\Swarm($function, $optimizer, $c1, $c2, $c3, $numberOfParticles, $limiter, $generateParticleCoordinatesCallback, $generateParticleVelocityCallback);
+$numberOfIterations = $swarm->run();
 
 print_r("Best value: ");
 print_r($swarm->getBestValue());
 print_r("\n");
 print_r("Best coordinates: ");
 print_r(implode("; ", $swarm->getBestCoordinates()->getCoordinates()));
+print_r("\n");
+print_r("Total iterations: ");
+print_r($numberOfIterations);
 print_r("\n");

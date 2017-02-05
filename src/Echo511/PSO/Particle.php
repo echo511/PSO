@@ -47,6 +47,11 @@ class Particle
     private $coordinates;
 
     /**
+     * @var float|int
+     */
+    private $value;
+
+    /**
      * @var Vector
      */
     private $velocity;
@@ -92,9 +97,8 @@ class Particle
         $this->c3 = $c3;
         $this->bestCoordinates = $this->coordinates = $coordinates;
         $this->velocity = $velocity;
-        $this->bestValue = $function($coordinates);
+        $this->bestValue = $this->value = $function($coordinates);
     }
-
 
     /**
      * Move particle.
@@ -126,6 +130,7 @@ class Particle
         $this->swarm->reportValue($newCoordinates, $newValue);
         $this->velocity = $newVelocity;
         $this->coordinates = $newCoordinates;
+        $this->value = $newValue;
     }
 
     /**
@@ -134,5 +139,13 @@ class Particle
     public function getCoordinates()
     {
         return $this->coordinates;
+    }
+
+    /**
+     * @return float|int
+     */
+    public function getValue()
+    {
+        return $this->value;
     }
 }
